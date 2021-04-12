@@ -1,0 +1,29 @@
+Questions about DateTime API 
+Question 1. Which class would you use to store your birthday in years, months, days, 
+seconds, and nanoseconds?
+Most likely you would use the LocalDateTime class. To take a particular time zone into 
+account, you would use the ZonedDateTime class. Both classes track date and time to 
+nanosecond precision and both classes, when used in conjunction with Period, give a 
+result using a combination of human-based units, such as years, months, and days.
+Question 2. Given a random date, how would you find the date of the previous 
+Thursday?
+You can use the previous method of a TemporalAdjuster:
+LocalDate date = ...;
+System.out.printf("The previous Thursday is: %s%n",
+ date.with(TemporalAdjuster.previous(DayOfWeek.THURSDAY)));
+Question 3. What is the difference between a ZoneId and a ZoneOffset?
+Both ZoneId and ZoneOffset track an offset from Greenwich/UTC time, but 
+the ZoneOffset class tracks only the absolute offset from Greenwich/UTC. 
+The ZoneId class also uses the ZoneRules to determine how an offset varies for a 
+particular time of year and region.
+Question 4. How would you convert an Instant to a ZonedDateTime? How would you 
+convert a ZonedDateTime to an Instant?
+You can convert an Instant to a ZonedDateTime by using 
+the ZonedDateTime.ofInstant method. You also need to supply a ZoneId:
+ZonedDateTime zdt = ZonedDateTime.ofInstant(Instant.now(),
+ ZoneId.systemDefault());
+Alternatively, you could use the Instant.atZone method:
+ZonedDateTime zdt = Instant.now().atZone(ZoneId.systemDefault());
+You can use the toInstant method in the ChronoZonedDateTime interface, implemented 
+by the ZonedDateTime class, to convert from a ZonedDateTime to an Instant:
+Instant inst = ZonedDateTime.now().toInstant()
